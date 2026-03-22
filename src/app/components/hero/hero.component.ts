@@ -27,6 +27,7 @@ import { RouterLink } from '@angular/router';
               <span class="badge cyan">Angular 17</span>
               <span class="badge cyan">.NET / C#</span>
               <span class="badge cyan">SQL Server</span>
+              <span class="badge cyan">PostgreSql</span>
               <span class="badge">TypeScript</span>
               <span class="badge">Deployment</span>
               <span class="badge">DevOps</span>
@@ -48,7 +49,7 @@ import { RouterLink } from '@angular/router';
               <div class="sdiv"></div>
               <div class="stat"><span class="sn" id="s2">0</span><span class="sl">Projects</span></div>
               <div class="sdiv"></div>
-              <div class="stat"><span class="sn">3</span><span class="sl">Core Stacks</span></div>
+              <div class="stat"><span class="sn">3</span><span class="sl">Core Stacks</span></div> 
               <div class="sdiv"></div>
               <div class="stat"><span class="sn" style="color:var(--purple)">AI</span><span class="sl">Next Focus</span></div>
             </div>
