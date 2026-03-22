@@ -24,11 +24,11 @@ import { CommonModule } from '@angular/common';
               <span class="ci-label">// email</span>
               <span class="ci-val">ankitjguptaforwork&#64;gmail.com ↗</span>
             </a>
-            <a class="cinfo-row" href="https://github.com/ankit-for-work" target="_blank">
+            <a class="cinfo-row" href="https://github.com/ankit-gupta-work" target="_blank">
               <span class="ci-label">// github</span>
-              <span class="ci-val">github.com/ankit-for-work ↗</span>
+              <span class="ci-val">github.com/ankit-gupta-work ↗</span>
             </a>
-            <a class="cinfo-row" href="https://linkedin.com/in/ankit-gupta" target="_blank">
+            <a class="cinfo-row" href="https://www.linkedin.com/in/ankit-gupta-489113253?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank">
               <span class="ci-label">// linkedin</span>
               <span class="ci-val">linkedin.com/in/ankit-gupta ↗</span>
             </a>

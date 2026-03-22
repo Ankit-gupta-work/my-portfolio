@@ -83,8 +83,8 @@ import { RouterLink } from '@angular/router';
                 <polygon points="175,55 168,82 161,64 170,45" fill="#7c6bff" opacity="0.2"/>
                 <polygon points="25,145 32,118 40,138 30,158" fill="#00e5c3" opacity="0.12"/>
               </svg>
-              <span class="ftag t1">Angular v17</span>
-              <span class="ftag t2">.NET + SQL</span>
+              <span class="ftag t1">Angular</span>
+              <span class="ftag t2">.NET + SQL/PostgreSql</span>
               <span class="ftag t3">AI Ready ✦</span>
             </div>
           </div>
