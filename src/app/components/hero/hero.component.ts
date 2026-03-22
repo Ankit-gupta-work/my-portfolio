@@ -28,6 +28,8 @@ import { RouterLink } from '@angular/router';
               <span class="badge cyan">.NET / C#</span>
               <span class="badge cyan">SQL Server</span>
               <span class="badge">TypeScript</span>
+              <span class="badge">Deployment</span>
+              <span class="badge">DevOps</span>
               <span class="badge">REST APIs</span>
               <span class="badge purple">AI — Next Focus</span>
             </div>
@@ -157,7 +159,7 @@ import { RouterLink } from '@angular/router';
     .t1 { top: 10px; right: -10px; }
     .t2 { bottom: 30px; left: -10px; }
     .t3 { top: 50%; right: -20px; transform: translateY(-50%); }
-    .marquee-bar { position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid var(--border); overflow: hidden; padding: .9rem 0; z-index: 10; background: var(--bg2); }
+    .marquee-bar { display: none; bottom: 0; left: 0; right: 0; border-top: 1px solid var(--border); overflow: hidden; padding: .9rem 0; z-index: 10; background: var(--bg2); }
     .marquee-track { display: flex; gap: 2rem; width: max-content; animation: marquee 20s linear infinite; font-family: var(--mono); font-size: .65rem; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; }
     .sep { color: var(--cyan); }
     @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
