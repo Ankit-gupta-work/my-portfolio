@@ -9,56 +9,158 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    .cursor {
+      width: 10px; height: 10px;
+      background: #00e5c3;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background 0.2s;
+    }
+    .cursor-ring {
+      width: 30px; height: 30px;
+      border: 1px solid rgba(0, 229, 195, 0.5);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+    }
+    .cursor.pressed {
+      width: 16px; height: 16px;
+      background: transparent;
+      border: 2px solid #00e5c3;
+    }
+    .cursor-ring.pressed {
+      transform: translate(-50%, -50%) scale(0.6);
+    }
+  </style>
 </head>
 <body>
-  <div class="cursor" id="cursor"></div>
+  <div class="cursor"      id="cursor"></div>
   <div class="cursor-ring" id="cursor-ring"></div>
+
   <canvas id="bg-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:0.15;"></canvas>
   <app-root style="position:relative;z-index:1;display:block;"></app-root>
 
   <script>
-    // Custom cursor
-    const cur = document.getElementById('cursor');
+    const cur  = document.getElementById('cursor');
     const ring = document.getElementById('cursor-ring');
-    let mx=0,my=0,rx=0,ry=0;
-    document.addEventListener('mousemove', e => {
-      mx=e.clientX; my=e.clientY;
-      cur.style.left=mx+'px'; cur.style.top=my+'px';
+
+    let mx = window.innerWidth / 2;
+    let my = window.innerHeight / 2;
+    let rx = mx, ry = my;
+
+    // ─── Move cursor to any position ───────────────────────
+    function moveCursor(x, y) {
+      mx = x; my = y;
+      cur.style.left  = mx + 'px';
+      cur.style.top   = my + 'px';
+      cur.style.display = 'block';
+      ring.style.display = 'block';
+    }
+
+    // ─── Desktop: mouse events ──────────────────────────────
+    document.addEventListener('mousemove', e => moveCursor(e.clientX, e.clientY));
+
+    document.addEventListener('mousedown', () => {
+      cur.classList.add('pressed');
+      ring.classList.add('pressed');
     });
-    (function animRing(){
-      rx+=(mx-rx)*.1; ry+=(my-ry)*.1;
-      ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    document.addEventListener('mouseup', () => {
+      cur.classList.remove('pressed');
+      ring.classList.remove('pressed');
+    });
+
+    // ─── Mobile: touch events ───────────────────────────────
+    document.addEventListener('touchstart', e => {
+      const t = e.touches[0];
+      moveCursor(t.clientX, t.clientY);
+      cur.classList.add('pressed');
+      ring.classList.add('pressed');
+    }, { passive: true });
+
+    document.addEventListener('touchmove', e => {
+      const t = e.touches[0];
+      moveCursor(t.clientX, t.clientY);
+    }, { passive: true });
+
+    document.addEventListener('touchend', e => {
+      // Keep cursor at last touch point on release
+      if (e.changedTouches.length > 0) {
+        const t = e.changedTouches[0];
+        moveCursor(t.clientX, t.clientY);
+      }
+      cur.classList.remove('pressed');
+      ring.classList.remove('pressed');
+    }, { passive: true });
+
+    // ─── Smooth ring follower (RAF loop) ───────────────────
+    (function animRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
       requestAnimationFrame(animRing);
     })();
 
-    // Geometric particle canvas
+    // ─── Geometric particle background ─────────────────────
     const canvas = document.getElementById('bg-canvas');
-    const ctx = canvas.getContext('2d');
-    function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+    const ctx    = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
     resize();
     window.addEventListener('resize', resize);
-    const pts = Array.from({length:60},()=>({
-      x:Math.random()*window.innerWidth,
-      y:Math.random()*window.innerHeight,
-      vx:(Math.random()-.5)*.35,
-      vy:(Math.random()-.5)*.35
+
+    const pts = Array.from({ length: 60 }, () => ({
+      x:  Math.random() * window.innerWidth,
+      y:  Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35
     }));
-    (function draw(){
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      pts.forEach(p=>{
-        p.x+=p.vx; p.y+=p.vy;
-        if(p.x<0||p.x>canvas.width) p.vx*=-1;
-        if(p.y<0||p.y>canvas.height) p.vy*=-1;
+
+    (function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      pts.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
       });
-      ctx.strokeStyle='#00e5c3'; ctx.lineWidth=.4;
-      for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++){
-        const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
-        const d=Math.sqrt(dx*dx+dy*dy);
-        if(d<140){ ctx.globalAlpha=(1-d/140)*.5; ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y); ctx.stroke(); }
+
+      ctx.strokeStyle = '#00e5c3';
+      ctx.lineWidth   = 0.4;
+
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          const dx = pts[i].x - pts[j].x;
+          const dy = pts[i].y - pts[j].y;
+          const d  = Math.sqrt(dx * dx + dy * dy);
+          if (d < 140) {
+            ctx.globalAlpha = (1 - d / 140) * 0.5;
+            ctx.beginPath();
+            ctx.moveTo(pts[i].x, pts[i].y);
+            ctx.lineTo(pts[j].x, pts[j].y);
+            ctx.stroke();
+          }
+        }
       }
-      ctx.globalAlpha=.7;
-      pts.forEach(p=>{ ctx.fillStyle='#00e5c3'; ctx.beginPath(); ctx.arc(p.x,p.y,1.5,0,Math.PI*2); ctx.fill(); });
-      ctx.globalAlpha=1;
+
+      ctx.globalAlpha = 0.7;
+      pts.forEach(p => {
+        ctx.fillStyle = '#00e5c3';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      ctx.globalAlpha = 1;
       requestAnimationFrame(draw);
     })();
   </script>
