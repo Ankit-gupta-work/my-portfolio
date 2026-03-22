@@ -49,8 +49,8 @@ import { RouterLink } from '@angular/router';
               <div class="sdiv"></div>
               <div class="stat"><span class="sn" id="s2">0</span><span class="sl">Projects</span></div>
               <div class="sdiv"></div>
-              <div class="stat"><span class="sn">3</span><span class="sl">Core Stacks</span></div> 
-              <div class="sdiv"></div>
+           <!--   <div class="stat"><span class="sn">3</span><span class="sl">Core Stacks</span></div>  -->
+               <!--    <div class="sdiv"></div>  -->
               <div class="stat"><span class="sn" style="color:var(--purple)">AI</span><span class="sl">Next Focus</span></div>
             </div>
           </div>
