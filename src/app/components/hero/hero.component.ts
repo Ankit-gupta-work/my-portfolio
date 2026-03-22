@@ -21,7 +21,7 @@ import { RouterLink } from '@angular/router';
               <span class="name-accent">Gupta<span class="dot-purple">.</span></span>
             </h1>
             <p class="tagline animate-up d3">
-              "Always eager to learn more — make mistakes, but never repeat them."
+              "I learn through experience, refine my approach, and ensure mistakes become lessons—not patterns."
             </p>
             <div class="badges animate-up d3">
               <span class="badge cyan">Angular 17</span>
@@ -30,6 +30,7 @@ import { RouterLink } from '@angular/router';
               <span class="badge">TypeScript</span>
               <span class="badge">Deployment</span>
               <span class="badge">DevOps</span>
+              <span class="badge">Linux Basics</span>
               <span class="badge">REST APIs</span>
               <span class="badge purple">AI — Next Focus</span>
             </div>
