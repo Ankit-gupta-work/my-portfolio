@@ -1,20 +1,21 @@
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ScrollRevealDirective } from '../../shared/directives/scroll-reveal.directive';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ScrollRevealDirective],
   template: `
     <section class="section-container">
-      <div class="section-hd">
+      <div class="section-hd" scrollReveal>
         <span class="lbl">// get_in_touch</span>
         <span class="line"></span>
         <span class="num">05</span>
       </div>
       <div class="contact-grid">
-        <div class="contact-left animate-up d1">
+        <div class="contact-left" scrollReveal revealDir="left" [revealDelay]="100">
           <h2 class="contact-headline">
             Let's build<br>something <em>great.</em>
           </h2>
@@ -22,15 +23,15 @@ import { CommonModule } from '@angular/common';
           <div class="cinfo">
             <a class="cinfo-row" href="mailto:ankitjguptaforwork@gmail.com">
               <span class="ci-label">// email</span>
-              <span class="ci-val">ankitjguptaforwork&#64;gmail.com ↗</span>
+              <span class="ci-val">ankitjguptaforwork&#64;gmail.com <span class="ci-arrow">→</span></span>
             </a>
             <a class="cinfo-row" href="https://github.com/ankit-gupta-work" target="_blank">
               <span class="ci-label">// github</span>
-              <span class="ci-val">github.com/ankit-gupta-work ↗</span>
+              <span class="ci-val">github.com/ankit-gupta-work <span class="ci-arrow">→</span></span>
             </a>
             <a class="cinfo-row" href="https://www.linkedin.com/in/ankit-gupta-489113253?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank">
               <span class="ci-label">// linkedin</span>
-              <span class="ci-val">linkedin.com/in/ankit-gupta ↗</span>
+              <span class="ci-val">linkedin.com/in/ankit-gupta <span class="ci-arrow">→</span></span>
             </a>
             <div class="cinfo-row">
               <span class="ci-label">// location</span>
@@ -42,7 +43,7 @@ import { CommonModule } from '@angular/common';
             </div>
           </div>
         </div>
-        <div class="contact-right animate-up d2">
+        <div class="contact-right" scrollReveal revealDir="right" [revealDelay]="200">
           <form [formGroup]="form" (ngSubmit)="onSubmit()" class="cf">
             <div class="cf-row">
               <div class="cf-group">
@@ -66,7 +67,8 @@ import { CommonModule } from '@angular/common';
               <span class="err-msg" *ngIf="invalid('message')">Required</span>
             </div>
             <button type="submit" class="cf-submit" [class.sent]="sent">
-              {{ sent ? 'Message Sent ✓' : 'Send Message →' }}
+              <span class="btn-text" *ngIf="!sent">Send Message <span class="btn-arrow">→</span></span>
+              <span class="btn-sent" *ngIf="sent">Message Sent ✓</span>
             </button>
           </form>
         </div>
@@ -75,31 +77,89 @@ import { CommonModule } from '@angular/common';
   `,
   styles: [`
     .contact-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 3rem; }
+
+    /* Headline */
     .contact-headline { font-size: 2rem; font-weight: 700; letter-spacing: -.03em; line-height: 1.1; margin-bottom: 1rem; }
     .contact-headline em { color: var(--cyan); font-style: normal; }
     .contact-sub { font-size: .85rem; color: var(--muted); line-height: 1.8; margin-bottom: 2rem; font-weight: 300; }
+
+    /* Info rows */
     .cinfo { display: flex; flex-direction: column; }
-    .cinfo-row { display: flex; justify-content: space-between; align-items: center; padding: .85rem 0; border-bottom: 1px solid var(--border); text-decoration: none; transition: padding-left .2s; }
-    .cinfo-row:hover { padding-left: 4px; }
+    .cinfo-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .85rem 0; border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      transition: padding-left .25s var(--ease-spring), background .2s;
+    }
+    .cinfo-row:hover { padding-left: 8px; }
     .ci-label { font-family: var(--mono); font-size: .65rem; color: var(--muted); }
-    .ci-val { font-size: .78rem; color: var(--cyan); transition: opacity .2s; }
-    .cinfo-row:hover .ci-val { opacity: .7; }
+    .ci-val { font-size: .78rem; color: var(--cyan); display: flex; align-items: center; gap: 4px; transition: opacity .2s; }
+    .ci-arrow {
+      display: inline-block;
+      transition: transform .25s var(--ease-spring);
+      color: var(--cyan);
+    }
+    .cinfo-row:hover .ci-arrow { transform: translateX(4px); }
+    .cinfo-row:hover .ci-val { opacity: .8; }
+
+    /* Form */
     .cf { display: flex; flex-direction: column; gap: 1rem; }
     .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .cf-group { display: flex; flex-direction: column; gap: .4rem; }
     .cf-group label { font-family: var(--mono); font-size: .65rem; color: var(--muted); letter-spacing: .04em; }
+
+    /* Inputs with focus glow */
     .cf-group input, .cf-group textarea {
       background: var(--bg2); border: 1px solid var(--border); color: var(--text);
       padding: .8rem 1rem; font-family: var(--font); font-size: .82rem;
-      outline: none; resize: vertical; transition: border-color .2s;
+      outline: none; resize: vertical;
+      transition: border-color .25s, box-shadow .25s var(--ease-spring);
     }
-    .cf-group input:focus, .cf-group textarea:focus { border-color: rgba(0,229,195,.4); }
+    .cf-group input:focus, .cf-group textarea:focus {
+      border-color: rgba(0,229,195,.5);
+      box-shadow: 0 0 0 3px rgba(0,229,195,0.07), 0 0 16px rgba(0,229,195,0.04);
+    }
     .cf-group input::placeholder, .cf-group textarea::placeholder { color: #1e293b; }
     .cf-group input.err, .cf-group textarea.err { border-color: rgba(239,68,68,.4); }
+    .cf-group input.err:focus, .cf-group textarea.err:focus {
+      box-shadow: 0 0 0 3px rgba(239,68,68,0.07);
+    }
     .err-msg { font-size: .68rem; color: #ef4444; font-family: var(--mono); }
-    .cf-submit { padding: 1rem; background: var(--cyan); color: #080c12; font-family: var(--font); font-size: .8rem; font-weight: 600; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: .06em; transition: all .2s; }
-    .cf-submit:hover { background: #00c4a8; }
-    .cf-submit.sent { background: #22c55e; color: #fff; }
+
+    /* Submit button */
+    .cf-submit {
+      padding: 1rem; background: var(--cyan); color: #080c12;
+      font-family: var(--font); font-size: .8rem; font-weight: 600;
+      border: none; cursor: pointer; text-transform: uppercase; letter-spacing: .06em;
+      transition: all .25s var(--ease-spring);
+      position: relative; overflow: hidden;
+    }
+    .cf-submit::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transform: translateX(-100%);
+      transition: transform .4s;
+    }
+    .cf-submit:hover {
+      background: #00c4a8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,229,195,.3);
+    }
+    .cf-submit:hover::after { transform: translateX(100%); }
+    .cf-submit:active { transform: translateY(0); }
+    .cf-submit.sent { background: #22c55e; color: #fff; transform: none; box-shadow: 0 4px 16px rgba(34,197,94,.3); }
+
+    .btn-text { display: flex; align-items: center; gap: 6px; justify-content: center; }
+    .btn-arrow { display: inline-block; transition: transform .25s var(--ease-spring); }
+    .cf-submit:not(.sent):hover .btn-arrow { transform: translateX(4px); }
+
+    .btn-sent { animation: sentPop .4s var(--ease-spring); }
+    @keyframes sentPop {
+      from { transform: scale(0.8); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
     @media(max-width:768px) { .contact-grid{grid-template-columns:1fr;} .cf-row{grid-template-columns:1fr;} }
   `]
 })

@@ -14,6 +14,11 @@
   --dim: #1e293b;
   --font: 'Space Grotesk', sans-serif;
   --mono: 'JetBrains Mono', monospace;
+
+  /* animation timing */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 html { scroll-behavior: smooth; }
@@ -62,12 +67,75 @@ button { cursor: none; font-family: var(--font); }
   .num { font-family: var(--mono); font-size: .65rem; color: var(--muted); }
 }
 
+/* ─── Keyframes ─────────────────────────────────────── */
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
 @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
 @keyframes spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-6px) rotate(1deg); }
+  66%       { transform: translateY(-3px) rotate(-1deg); }
+}
+
+@keyframes drawLine {
+  from { width: 0; opacity: 0; }
+  to   { width: 28px; opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.6); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,229,195,0); }
+  50%       { box-shadow: 0 0 0 6px rgba(0,229,195,0.08); }
+}
+
+@keyframes glowPulseRing {
+  0%   { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+
+@keyframes wipBadge {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@keyframes dotPop {
+  0%   { transform: scale(0); }
+  70%  { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ─── Utility animation classes ─────────────────────── */
 
 .animate-up { animation: fadeUp .6s cubic-bezier(.16,1,.3,1) forwards; }
 .d1 { animation-delay: .1s; opacity: 0; }
